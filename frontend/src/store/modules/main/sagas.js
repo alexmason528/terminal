@@ -16,6 +16,7 @@ export const doCreateAddress = function* ({ payload }) {
   try {
     const res = yield call(axios.post, '/address/', payload)
     yield put(actions.createAddressSuccess(res.data))
+    yield put(actions.listAddress())
   } catch (error) {
     yield put(actions.createAddressFail(error))
   }
@@ -25,19 +26,20 @@ export const doUpdateAddress = function* ({ payload }) {
   const { id, data } = payload
 
   try {
-    const res = yield call(axios.get, `/address/${id}`, data)
-    yield put(actions.listAddressSuccess(res.data))
+    const res = yield call(axios.patch, `/address/${id}/`, data)
+    yield put(actions.updateAddressSuccess(res.data))
   } catch (error) {
-    yield put(actions.listAddressFail(error))
+    yield put(actions.updateAddressFail(error))
   }
 }
 
 export const doDeleteAddress = function* ({ payload }) {
   try {
-    yield call(axios.get, `/address/${payload}`)
-    yield put(actions.listAddressSuccess(payload))
+    yield call(axios.delete, `/address/${payload}/`)
+    yield put(actions.deleteAddressSuccess(payload))
+    yield put(actions.listAddress())
   } catch (error) {
-    yield put(actions.listAddressFail(error))
+    yield put(actions.deleteAddressFail(error))
   }
 }
 
